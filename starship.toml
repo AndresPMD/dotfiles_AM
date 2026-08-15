@@ -1,0 +1,43 @@
+# Minimal Starship config for AI research workflow
+
+# Use a clean single-line prompt
+format = """$python$directory$character"""
+
+# Don't add blank line between prompts
+add_newline = false
+
+# Don't let Starship change the terminal/tmux window title
+[shell]
+disabled = true
+
+# Show full directory path
+[directory]
+truncation_length = 0
+truncate_to_repo = false
+style = "bold cyan"
+
+# Hide git entirely
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+# Show Python virtualenv name
+[python]
+format = '[(\($virtualenv\) )]($style)'
+style = "bold yellow"
+detect_extensions = []
+detect_files = []
+detect_folders = []
+
+# Show command duration for long-running commands (>5s)
+[cmd_duration]
+min_time = 5_000
+format = "took [$duration]($style) "
+style = "bold yellow"
+
+# Prompt character
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"

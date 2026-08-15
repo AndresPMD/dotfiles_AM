@@ -1,0 +1,94 @@
+#!/usr/bin/env sh
+# bsp or float (default: bsp)
+#yabai -m config layout bsp
+
+# My custom space names for my 3 monitor setup. These names are used in some of my scripts.
+# Only spaces that actually exist get labelled; the rest are skipped quietly instead
+# of spamming "could not locate the space to act on!" on every load.
+_i=1
+for _label in one two three four five six seven eight nine; do
+    yabai -m space "$_i" --label "$_label" 2>/dev/null
+    _i=$((_i + 1))
+done
+
+# float system preferences. Most of these just diable Yabai form resizing them.
+# NOTE: yabai v7 renamed the rule key `layer` -> `sub-layer`. An unknown key makes yabai
+# reject the WHOLE rule, which is why these all silently stopped applying.
+yabai -m rule --add app="^System Preferences$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^System Settings$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Karabiner-Elements$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Karabiner-EventViewer$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Finder$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Keka$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Alfred Preferences$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Disk Utility$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^System Information$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Activity Monitor$" sticky=on sub-layer=above manage=off
+yabai -m rule --add app="^Path Finder$" manage=off
+yabai -m rule --add app="^TeamViewer$" sticky=off sub-layer=above manage=off
+yabai -m rule --add app="Fantastical" manage=off
+yabai -m rule --add app="^Spotify$" manage=off
+yabai -m rule --add app="^iTerm2$" manage=off
+yabai -m rule --add app="^Flux$" manage=off
+yabai -m rule --add app="^Time Out$" manage=off
+yabai -m rule --add app="^perl_client_app$" manage=off
+yabai -m rule --add app="^console$" manage=off
+yabai -m rule --add app="^Harvest$" manage=off
+yabai -m rule --add app="^CiscoSparkHelper$" manage=off
+yabai -m rule --add app="^Logi Options$" manage=off
+yabai -m rule --add app="^Cisco Webex Start$" manage=off
+yabai -m rule --add app="^Private Internet Access$" manage=off
+
+# yabai -m config active_window_border_topmost on
+# yabai -m config window_border on
+# yabai -m config window_border_width 3
+
+# yabai -m config active_window_border_color   0xff85c1e9 
+# yabai -m config insert_window_border_color   0xff8E83B8
+# yabai -m config normal_window_border_color   0xff8E83B8
+# yabai -m config normal_window_border_color   0xff51425C
+
+## Some random global settings
+# yabai -m config focus_follows_mouse          autoraise
+# yabai -m config focus_follows_mouse          autofocus
+yabai -m config mouse_follows_focus on
+# New window spawns to the right if vertical split, or bottom if horizontal split
+yabai -m config window_placement second_child
+# `window_topmost` was removed in yabai v7 (it errored on every load). Topmost is now
+# per-window: `yabai -m window --toggle topmost`.
+#yabai -m config window_shadow float
+yabai -m config window_opacity off
+yabai -m config window_opacity_duration 0.00
+yabai -m config active_window_opacity 1.0
+#yabai -m config normal_window_opacity        0.97
+#yabai -m config window_border                on | off
+
+## some other settings
+yabai -m config auto_balance off
+yabai -m config split_ratio 0.50
+# # set mouse interaction modifier key (default: fn)
+yabai -m config mouse_modifier ctrl
+# set modifier + right-click drag to resize window (default: resize)
+yabai -m config mouse_action2 resize
+# set modifier + left-click drag to resize window (default: move)
+yabai -m config mouse_action1 move
+
+# general space settings
+#yabai -m config focused_border_skip_floating  1
+# Only applies when space 3 exists (it does not on a single-display setup).
+yabai -m query --spaces --space 3 >/dev/null 2>&1 && yabai -m config --space 3 layout stack
+#yabai -m config --space 3 layout float
+
+## Change how yabai looks
+yabai -m config layout bsp
+yabai -m config top_padding 5
+yabai -m config bottom_padding 5
+yabai -m config left_padding 2
+yabai -m config right_padding 2
+yabai -m config window_gap 10
+
+# Rules above only fire for newly-created windows. Apply them to windows that already
+# exist so a reload doesn't leave e.g. Finder tiled until you close and reopen it.
+yabai -m rule --apply
+
+echo "yabai configuration loaded.."
